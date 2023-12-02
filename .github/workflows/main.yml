@@ -2,7 +2,9 @@ name: Fetch and Send Page
 
 on:
   workflow_dispatch:
-
+  schedule:
+    - cron: '0 */2 * * *'  # Run every two hours
+    
 jobs:
   fetch-and-send:
     runs-on: ubuntu-latest
