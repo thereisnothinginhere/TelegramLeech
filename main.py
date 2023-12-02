@@ -115,7 +115,7 @@ def seedr_download(MagneticURL):
                           quoted_link = urllib.parse.unquote(link["url"])
                           encoded_url = urllib.parse.quote(quoted_link, safe=':/?&=()[]')
                           # print(encoded_url)
-                          aria2_download(add["title"],encoded_url)
+                          aria2_download(file['name'],encoded_url)
                       else:
                         print(f"File size {convert_size(file['size'])} is Greater than 2GB")
                       seedr.deleteFolder(folder['id'])
