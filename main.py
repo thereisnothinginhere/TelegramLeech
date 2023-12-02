@@ -1,4 +1,3 @@
-import requests
 from bs4 import BeautifulSoup
 from time import sleep
 import subprocess
@@ -7,10 +6,33 @@ import random
 import subprocess
 from telegram import Bot, InputMediaVideo
 from telegram.ext import Updater
+import math
+from seedrcc import Login,Seedr
+from time import sleep
+import urllib.parse
+from urllib.parse import unquote
+import requests
+
+Username  = "herotesthero1@gmail.com" #@param {type:"string"}
+Password  = "t&amp;hFsoVFkjoOyw13" #@param {type:"string"}
+
+account = Login(Username, Password)
+account.authorize()
+seedr = Seedr(token=account.token)
 
 API_SERVER_URL = 'http://localhost:8081/bot'
 TELEGRAM_TOKEN = '5942550686:AAEkBVyp0U0zhP3z7ylmw4m2KS-pTD9UyZQ'
 chat_id = '5267672282' #@param {type:"string"}
+
+def convert_size(size_bytes):
+    """Convert the size in bytes to a more human-readable format."""
+    if size_bytes == 0:
+        return "0B"
+    size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+    i = int(math.floor(math.log(size_bytes, 1024)))
+    p = math.pow(1024, i)
+    s = round(size_bytes / p, 2)
+    return f"{s} {size_name[i]}"
 
 def get_video_duration(file_path):
     cmd = f'ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "{file_path}"'
