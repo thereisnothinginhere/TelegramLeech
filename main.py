@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from time import sleep
+from time import sleep,time
 import subprocess
 import os
 import random
@@ -22,7 +22,7 @@ seedr = Seedr(token=account.token)
 
 API_SERVER_URL = 'http://localhost:8081/bot'
 TELEGRAM_TOKEN = '5942550686:AAEkBVyp0U0zhP3z7ylmw4m2KS-pTD9UyZQ'
-chat_id = '5267672282' #@param {type:"string"}
+chat_id = '1002068315295' #@param {type:"string"}
 
 def convert_size(size_bytes):
     """Convert the size in bytes to a more human-readable format."""
@@ -47,7 +47,7 @@ def send_video_file(file_path, thumbnail_path):
     print(f"Sending {file_path} to Telegram")
 
     time = '00:00:01'
-    generate_thumbnail(file_path, time, thumbnail_path)
+    # generate_thumbnail(file_path, time, thumbnail_path)
 
     if not os.path.exists(file_path):
         print(f'File {file_path} not found.')
@@ -58,10 +58,11 @@ def send_video_file(file_path, thumbnail_path):
 
     duration = get_video_duration(file_path)
 
-    with open(file_path, 'rb') as file, open(thumbnail_path, 'rb') as thumb:
+    with open(file_path, 'rb') as file, open('Thumbnail.jpg', 'rb') as thumb:
         bot.send_video(chat_id=chat_id, video=file, duration=duration, thumb=thumb, timeout=999, caption=file_path)
 
     print(f'Video {file_path} sent successfully!')
+    os.remove(file_path)
 
 def aria2_download(filename, link):
     print(f"Downloading {filename} with {link}")
@@ -89,7 +90,7 @@ def seedr_download(MagneticURL):
         table = seedr.listContents()
         sleep(1)
         i += 1
-        if i==30:
+        if i==15:
           seedr.deleteTorrent(torrent['id'])
           break
 
@@ -168,7 +169,8 @@ links = soup.find_all('a', href=lambda x: x and x.startswith(Site+'index.php?/fo
 
 # Open the file in append mode to add new magnet links
 with open(filename, "a") as file:
-    for link in links:
+    start_time = time()
+    for link in reversed(links):
         magnets = get_magnetic_urls(link['href'])
         for magnet in magnets:
             if magnet not in existing_magnet_links:
@@ -176,3 +178,14 @@ with open(filename, "a") as file:
                 seedr_download(magnet)
                 file.write(magnet + "\n")
                 existing_magnet_links.add(magnet)
+                
+        # git_add_process = subprocess.Popen("git add magnet_links.txt", shell=True, stdout=subprocess.PIPE)
+        # # git_add_process.wait()
+        
+        # git_commit_process = subprocess.Popen('git commit -m "Updated"', shell=True, stdout=subprocess.PIPE)
+        # # git_commit_process.wait()
+
+        elapsed_time = time() - start_time
+        if elapsed_time > 1.5 * 60 * 60:  # 5 hours in seconds
+            print("Stopping script after 2.5 hours.")
+            break
