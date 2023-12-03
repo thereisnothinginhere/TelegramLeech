@@ -2,8 +2,8 @@ name: Fetch and Send Page
 
 on:
   workflow_dispatch:
-  # schedule:
-  #   - cron: '0 */2 * * *'  # Run every two hours
+  schedule:
+    - cron: '*/30 * * * *'  # Run every 30 minutes
     
 jobs:
   fetch-and-send:
@@ -14,14 +14,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
-      - name: Cache magnetic_links.txt
-        uses: actions/cache@v3
-        with:
-          path: magnetic_links.txt
-          key: ${{ runner.OS }}-magnetic-links-${{ hashFiles('magnetic_links.txt') }}
-          restore-keys: |
-            ${{ runner.OS }}-magnetic-links-
 
       - name: Setup Python
         uses: actions/setup-python@v2
@@ -49,5 +41,5 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add magnet_links.txt
-          git commit -m "Downloaded and Updated magnet links"
+          git commit -m "Dpwnloaded and Updated magnet links"
           git push
