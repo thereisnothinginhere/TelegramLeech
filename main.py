@@ -178,12 +178,13 @@ with open(filename, "a") as file:
         for magnet in magnets:
             if magnet not in existing_magnet_links:
                 # Write new magnet links to the file
-                seedr_download(magnet)
+                # seedr_download(magnet)
                 file.write(magnet + "\n")
                 existing_magnet_links.add(magnet)
 
         git_add_process = subprocess.Popen("sh git.sh", shell=True, stdout=subprocess.PIPE)
         git_add_process.wait()
+        break
         
         # git_add_process = subprocess.Popen("git add magnet_links.txt", shell=True, stdout=subprocess.PIPE)
         # git_add_process.wait()
