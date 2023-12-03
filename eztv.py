@@ -22,7 +22,7 @@ seedr = Seedr(token=account.token)
 
 API_SERVER_URL = 'http://localhost:8081/bot'
 TELEGRAM_TOKEN = '5942550686:AAEkBVyp0U0zhP3z7ylmw4m2KS-pTD9UyZQ'
-chat_id = '-1002068315295' #@param {type:"string"}
+chat_id = '-1002111866259' #@param {type:"string"}
 
 def convert_size(size_bytes):
     """Convert the size in bytes to a more human-readable format."""
@@ -166,10 +166,10 @@ soup = BeautifulSoup(response.text, 'html.parser')
 
 # Find all the links on the page that start with https://www.1tamilmv.autos/index.php?/forums/topic/
 links = soup.find_all('a', href=lambda x: x and x.startswith('/ep/') and x.endswith('/'))
-
+# print(links)
 delete_all()
-if True:
-# try:
+# if True:
+try:
     # Open the file in append mode to add new magnet links
     with open(filename, "a") as file:
         start_time = time()
@@ -186,5 +186,5 @@ if True:
             if elapsed_time > 0.2 * 60 * 60:  # 5 hours in seconds
                 print("Stopping script after 2.5 hours.")
                 break
-# except Exception as e:
-#     print("Error Occured :",e)
+except Exception as e:
+    print("Error Occured :",e)
