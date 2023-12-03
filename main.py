@@ -109,7 +109,7 @@ def seedr_download(MagneticURL):
                 for file in table['files']:
                     print(f"\t{file['folder_file_id']}: {file['name']}, {convert_size(file['size'])}, Video={file['play_video']}")
                     if file['play_video']==True:
-                      if file['size'] / (1024**3) < 2:
+                      if file['size'] / (1024**3) < 1.95:
                           link=seedr.fetchFile(file['folder_file_id'])
                           # print('\t',link["url"])
                           quoted_link = urllib.parse.unquote(link["url"])
