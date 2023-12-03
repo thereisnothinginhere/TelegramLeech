@@ -147,44 +147,51 @@ def delete_all():
 
 import requests
 from bs4 import BeautifulSoup
+from time import time, sleep
+
+def get_mirrors():
+    return ["https://eztvx.to", "https://eztv1.xyz", "https://eztv.wf", "https://eztv.tf", "https://eztv.yt"]
 
 Site = "https://eztvx.to/home" #@param {type:"string"}
 filename = "magnet_links_eztv.txt"
 
-# Load existing magnet links from the file
-try:
-    with open(filename, "r") as file:
-        existing_magnet_links = set(file.read().splitlines())
-except FileNotFoundError:
-    existing_magnet_links = set()
+def scrape_links(site_url):
+    response = requests.get(site_url+/home)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    links = soup.find_all('a', href=lambda x: x and x.startswith('/ep/') and x.endswith('/'))
+    return links
 
-# Send an HTTP request to the web server
-response = requests.get(Site)
+existing_magnet_links = set()
 
-# Parse the HTML code of the web page
-soup = BeautifulSoup(response.text, 'html.parser')
-
-# Find all the links on the page that start with https://www.1tamilmv.autos/index.php?/forums/topic/
-links = soup.find_all('a', href=lambda x: x and x.startswith('/ep/') and x.endswith('/'))
-# print(links)
-delete_all()
-# if True:
-try:
-    # Open the file in append mode to add new magnet links
-    with open(filename, "a") as file:
-        start_time = time()
-        for link in links:
-            magnets = get_magnetic_urls('https://eztvx.to'+link['href'])
-            for magnet in magnets:
-                if magnet not in existing_magnet_links:
-                    # Write new magnet links to the file
-                    seedr_download(magnet)
-                    file.write(magnet + "\n")
-                    existing_magnet_links.add(magnet)
+for mirror_site in get_mirrors():
+    links = scrape_links(mirror_site)
     
-            elapsed_time = time() - start_time
-            if elapsed_time > 0.2 * 60 * 60:  # 5 hours in seconds
-                print("Stopping script after 2.5 hours.")
-                break
-except Exception as e:
-    print("Error Occured :",e)
+    if links:
+        break  # If links are found, exit the loop
+
+if not links:
+    print("No links found on any mirror site. Exiting.")
+else:
+    try:
+        with open(filename, "r") as file:
+            existing_magnet_links = set(file.read().splitlines())
+    except FileNotFoundError:
+        pass  # No existing file, so the set remains empty
+    try:
+        with open(filename, "a") as file:
+            start_time = time()
+            for link in links:
+                magnets = get_magnetic_urls(mirror_site+link['href'])
+                for magnet in magnets:
+                    if magnet not in existing_magnet_links:
+                        seedr_download(magnet)
+                        file.write(magnet + "\n")
+                        existing_magnet_links.add(magnet)
+    
+                elapsed_time = time() - start_time
+                if elapsed_time > 0.2 * 60 * 60:  # 2.5 hours in seconds
+                    print("Stopping script after 2.5 hours.")
+                    break
+    except Exception as e:
+        print(e)
+
