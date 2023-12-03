@@ -168,8 +168,8 @@ soup = BeautifulSoup(response.text, 'html.parser')
 links = soup.find_all('a', href=lambda x: x and x.startswith('/ep/') and x.endswith('/'))
 
 delete_all()
-
-try:
+if True:
+# try:
     # Open the file in append mode to add new magnet links
     with open(filename, "a") as file:
         start_time = time()
@@ -186,5 +186,5 @@ try:
             if elapsed_time > 0.2 * 60 * 60:  # 5 hours in seconds
                 print("Stopping script after 2.5 hours.")
                 break
-except Exception as e:
-    print("Error Occured :",e)
+# except Exception as e:
+#     print("Error Occured :",e)
