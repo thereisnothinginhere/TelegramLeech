@@ -190,8 +190,10 @@ try:
     with open(filename, "a") as file:
         start_time = time()
         for i in range(35,1):
-            Site = f"{Site}/browse/207/{i}/3"
-            magnets = get_magnetic_urls(Site)
+            URL = f"{Site}/browse/207/{i}/3"
+            print(URL)            
+            magnets = get_magnetic_urls(URL)
+            print(magnets)
             for magnet in magnets:
                 if magnet not in existing_magnet_links:
                     # Write new magnet links to the file
