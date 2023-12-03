@@ -173,9 +173,10 @@ alternative_sites = [
 ]
 
 for Site in alternative_sites:
-    if get_magnetic_urls(Site+'/browse/207'):
+    mag=get_magnetic_urls(Site+'/browse/207')
+    if mag:
         break
-print(Site)
+print(Site,mag)
 # Load existing magnet links from the file
 try:
     with open(filename, "r") as file:
@@ -184,7 +185,7 @@ except FileNotFoundError:
     existing_magnet_links = set()
 
 delete_all()
-
+print("Working")
 try:
     # Open the file in append mode to add new magnet links
     with open(filename, "a") as file:
