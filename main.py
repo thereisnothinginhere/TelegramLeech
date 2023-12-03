@@ -174,10 +174,8 @@ delete_all()
 with open(filename, "a") as file:
     start_time = time()
     for link in reversed(links):
-        print(f"Link : {link['href']}")
         magnets = get_magnetic_urls(link['href'])
         for magnet in magnets:
-            print(f"Magnet : {magnet}")
             if magnet not in existing_magnet_links:
                 # Write new magnet links to the file
                 seedr_download(magnet)
