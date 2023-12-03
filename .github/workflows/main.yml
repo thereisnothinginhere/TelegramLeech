@@ -3,7 +3,7 @@ name: Fetch and Send Page
 on:
   workflow_dispatch:
   schedule:
-    - cron: '*/30 * * * *'  # Run every 30 minutes
+    - cron: '0 * * * *'  # Run every hour
     
 jobs:
   fetch-and-send:
