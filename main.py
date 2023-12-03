@@ -112,18 +112,13 @@ def seedr_download(MagneticURL):
                       if file['size'] / (1024**3) < 1.95:
                           link=seedr.fetchFile(file['folder_file_id'])
                           # print('\t',link["url"])
-                          if link['result']:
-                            quoted_link = urllib.parse.unquote(link["url"])
-                            encoded_url = urllib.parse.quote(quoted_link, safe=':/?&=()[]')
-                            # print(encoded_url)
-                            aria2_download(add["title"],encoded_url)
-                          else:
-                            print(link)
-                            print("Access Denied for Link")
-                            seedr.deleteFolder(folder['id'])
+                          quoted_link = urllib.parse.unquote(link["url"])
+                          encoded_url = urllib.parse.quote(quoted_link, safe=':/?&=()[]')
+                          # print(encoded_url)
+                          aria2_download(add["title"],encoded_url)
                       else:
                         print(f"File size {convert_size(file['size'])} is Greater than 2GB")
-                      seedr.deleteFolder(folder['id'])
+            seedr.deleteFolder(folder['id'])
 
 def get_magnetic_urls(URL):
   # Send an HTTP request to the web server
