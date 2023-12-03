@@ -40,6 +40,7 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
+          git pull
           git add magnet_links.txt
           git commit -m "Dpwnloaded and Updated magnet links"
           git push
