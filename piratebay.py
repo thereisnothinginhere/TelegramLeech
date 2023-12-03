@@ -175,7 +175,7 @@ alternative_sites = [
 for Site in alternative_sites:
     if get_magnetic_urls(Site+'/browse/207'):
         break
-print(site)
+print(Site)
 # Load existing magnet links from the file
 try:
     with open(filename, "r") as file:
