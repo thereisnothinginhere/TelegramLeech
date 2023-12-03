@@ -174,17 +174,19 @@ delete_all()
 with open(filename, "a") as file:
     # start_time = time()
     for link in reversed(links):
+        print(f"Link : {link['href']}")
         magnets = get_magnetic_urls(link['href'])
         for magnet in magnets:
+            print(f"Magnet : {magnet}")
             if magnet not in existing_magnet_links:
                 # Write new magnet links to the file
-                # seedr_download(magnet)
+                seedr_download(magnet)
                 file.write(magnet + "\n")
                 existing_magnet_links.add(magnet)
 
         git_add_process = subprocess.Popen("sh git.sh", shell=True, stdout=subprocess.PIPE)
         git_add_process.wait()
-        break
+        # break
         
         # git_add_process = subprocess.Popen("git add magnet_links.txt", shell=True, stdout=subprocess.PIPE)
         # git_add_process.wait()
