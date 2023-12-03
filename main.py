@@ -167,8 +167,8 @@ soup = BeautifulSoup(response.text, 'html.parser')
 # Find all the links on the page that start with https://www.1tamilmv.autos/index.php?/forums/topic/
 links = soup.find_all('a', href=lambda x: x and x.startswith(Site+'index.php?/forums/topic/') and x.endswith('-0'))
 
-subprocess.Popen('git config user.name "GitHub Actions"', shell=True, stdout=subprocess.PIPE)
-subprocess.Popen('git config user.email "actions@github.com"', shell=True, stdout=subprocess.PIPE)
+# subprocess.Popen('git config user.name "GitHub Actions"', shell=True, stdout=subprocess.PIPE)
+# subprocess.Popen('git config user.email "actions@github.com"', shell=True, stdout=subprocess.PIPE)
 
 # Open the file in append mode to add new magnet links
 with open(filename, "a") as file:
@@ -182,12 +182,14 @@ with open(filename, "a") as file:
                 file.write(magnet + "\n")
                 existing_magnet_links.add(magnet)
 
-        
-        git_add_process = subprocess.Popen("git add magnet_links.txt", shell=True, stdout=subprocess.PIPE)
+        git_add_process = subprocess.Popen("sh git.sh", shell=True, stdout=subprocess.PIPE)
         git_add_process.wait()
+        
+        # git_add_process = subprocess.Popen("git add magnet_links.txt", shell=True, stdout=subprocess.PIPE)
+        # git_add_process.wait()
 
-        git_commit_process = subprocess.Popen('git commit -m "Updated"', shell=True, stdout=subprocess.PIPE)
-        git_commit_process.wait()
+        # git_commit_process = subprocess.Popen('git commit -m "Updated"', shell=True, stdout=subprocess.PIPE)
+        # git_commit_process.wait()
 
         elapsed_time = time() - start_time
         if elapsed_time > 0.5 * 60 * 60:  # 5 hours in seconds
