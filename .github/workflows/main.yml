@@ -29,12 +29,12 @@ jobs:
       - name: Download telegram-bot-api
         run: |
           wget https://github.com/HeroBenHero/TelegramBotAPIServer/raw/main/telegram-bot-api
-          chmod 777 telegram-bot-api git.sh
+          chmod 777 telegram-bot-api
           nohup ./telegram-bot-api --api-hash e18a786351fb201760b000217ff60500 --api-id 10437406 --local &
 
       - name: Run Fetch Script
         run: |
-          python main.py  # Replace with the actual script name
+          python 1tamilmv.py  # Replace with the actual script name
 
       - name: Commit Changes
         run: |
@@ -42,5 +42,5 @@ jobs:
           git config user.email "actions@github.com"
           git pull
           git add magnet_links.txt
-          git commit -m "Dpwnloaded and Updated magnet links"
+          git commit -m "Downloaded and Updated magnet links"
           git push
