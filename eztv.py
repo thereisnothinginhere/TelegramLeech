@@ -156,7 +156,7 @@ Site = "https://eztvx.to/home" #@param {type:"string"}
 filename = "magnet_links_eztv.txt"
 
 def scrape_links(site_url):
-    response = requests.get(site_url+/home)
+    response = requests.get(site_url+'/home')
     soup = BeautifulSoup(response.text, 'html.parser')
     links = soup.find_all('a', href=lambda x: x and x.startswith('/ep/') and x.endswith('/'))
     return links
