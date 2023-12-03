@@ -166,6 +166,7 @@ soup = BeautifulSoup(response.text, 'html.parser')
 
 # Find all the links on the page that start with https://www.1tamilmv.autos/index.php?/forums/topic/
 links = soup.find_all('a', href=lambda x: x and x.startswith(Site+'index.php?/forums/topic/') and x.endswith('-0'))
+links = {link.get('href') for link in links if link.get('href') is not None}
 
 # subprocess.Popen('git config user.name "GitHub Actions"', shell=True, stdout=subprocess.PIPE)
 # subprocess.Popen('git config user.email "actions@github.com"', shell=True, stdout=subprocess.PIPE)
@@ -173,8 +174,8 @@ delete_all()
 # Open the file in append mode to add new magnet links
 with open(filename, "a") as file:
     start_time = time()
-    for link in reversed(links):
-        magnets = get_magnetic_urls(link['href'])
+    for link in links:
+        magnets = get_magnetic_urls(link)
         for magnet in magnets:
             if magnet not in existing_magnet_links:
                 # Write new magnet links to the file
