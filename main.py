@@ -179,13 +179,13 @@ with open(filename, "a") as file:
                 file.write(magnet + "\n")
                 existing_magnet_links.add(magnet)
                 
-        # git_add_process = subprocess.Popen("git add magnet_links.txt", shell=True, stdout=subprocess.PIPE)
+        git_add_process = subprocess.Popen("git add magnet_links.txt", shell=True, stdout=subprocess.PIPE)
         # # git_add_process.wait()
         
-        # git_commit_process = subprocess.Popen('git commit -m "Updated"', shell=True, stdout=subprocess.PIPE)
+        git_commit_process = subprocess.Popen('git commit -m "Updated"', shell=True, stdout=subprocess.PIPE)
         # # git_commit_process.wait()
 
         elapsed_time = time() - start_time
-        if elapsed_time > 1.5 * 60 * 60:  # 5 hours in seconds
+        if elapsed_time > 0.5 * 60 * 60:  # 5 hours in seconds
             print("Stopping script after 2.5 hours.")
             break
