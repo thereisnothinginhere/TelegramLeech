@@ -147,10 +147,35 @@ def delete_all():
 
 import requests
 from bs4 import BeautifulSoup
-
-Site = "https://www.1tamilmv.phd/"  # @param {type:"string"}
 filename = "magnet_links_piratebay.txt"
 
+alternative_sites = [
+    'https://thepiratebay7.com',
+    'https://thepiratebay0.org',
+    'https://thepiratebay10.org',
+    'https://pirateproxy.live',
+    'https://thehiddenbay.com',
+    'https://piratebay.live',
+    'https://thepiratebay.zone',
+    'https://tpb.party',
+    'https://thepiratebay.party',
+    'https://piratebay.party',
+    'https://piratebayproxy.live',
+    'https://pirateproxylive.org',
+    'https://thepiratebay1.com',
+    'https://thepiratebay1.live',
+    'https://thepiratebays.info',
+    'https://thepiratebays.live',
+    'https://thepiratebay1.top',
+    'https://thepiratebay1.info',
+    'https://thepiratebay.rocks',
+    'https://thepiratebay.vet'
+]
+
+for Site in alternative_sites:
+    if get_magnetic_urls(Site+'/browse/207'):
+        break
+print(site)
 # Load existing magnet links from the file
 try:
     with open(filename, "r") as file:
@@ -165,7 +190,7 @@ try:
     with open(filename, "a") as file:
         start_time = time()
         for i in range(35,1):
-            Site = f"https://thepiratebay0.org/browse/207/{i}/3"
+            Site = f"{Site}/browse/207/{i}/3"
             magnets = get_magnetic_urls(Site)
             for magnet in magnets:
                 if magnet not in existing_magnet_links:
