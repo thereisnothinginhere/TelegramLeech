@@ -179,7 +179,7 @@ else:
         pass  # No existing file, so the set remains empty
     try:
         with open(filename, "a") as file:
-            start_time = time()
+            # start_time = time()
             for link in links:
                 magnets = get_magnetic_urls(mirror_site+link['href'])
                 for magnet in magnets:
@@ -188,10 +188,10 @@ else:
                         file.write(magnet + "\n")
                         existing_magnet_links.add(magnet)
     
-                elapsed_time = time() - start_time
-                if elapsed_time > 0.2 * 60 * 60:  # 2.5 hours in seconds
-                    print("Stopping script after 2.5 hours.")
-                    break
+                # elapsed_time = time() - start_time
+                # if elapsed_time > 0.2 * 60 * 60:  # 2.5 hours in seconds
+                #     print("Stopping script after 2.5 hours.")
+                #     break
     except Exception as e:
         print(e)
 
