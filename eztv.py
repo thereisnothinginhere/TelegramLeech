@@ -13,8 +13,8 @@ import urllib.parse
 from urllib.parse import unquote
 import requests
 
-Username  = "herobenhero2@gmail.com" #@param {type:"string"}
-Password  = "JBD7!xN@oTSkrhKd7Pch" #@param {type:"string"}
+Username  = "herobenhero3@gmail.com" #@param {type:"string"}
+Password  = "Ge^j)&amp;H&amp;VkpBYwNmP247R" #@param {type:"string"}
 
 account = Login(Username, Password)
 account.authorize()
