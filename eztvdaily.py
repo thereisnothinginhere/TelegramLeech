@@ -168,7 +168,7 @@ for mirror_site in get_mirrors():
     
     if links:
         break  # If links are found, exit the loop
-print(mirror_site)
+# print(mirror_site)
 if not links:
     print("No links found on any mirror site. Exiting.")
 else:
@@ -183,7 +183,7 @@ else:
             for link in links:
                 magnets = get_magnetic_urls(mirror_site+link['href'])
                 for magnet in magnets:
-                    print(magnet)
+                    # print(magnet)
                     if magnet not in existing_magnet_links:
                         seedr_download(magnet)
                         file.write(magnet + "\n")
