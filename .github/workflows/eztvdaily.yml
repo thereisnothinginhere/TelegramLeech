@@ -1,9 +1,9 @@
-name: EZTV
+name: EZTV Daily
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '*/30 * * * *'  # Run every 30 minutes
+    - cron: '0 */12 * * *'  # Run every 30 minutes
     
 jobs:
   fetch-and-send:
@@ -34,7 +34,7 @@ jobs:
 
       - name: Run Fetch Script
         run: |
-          python eztv.py  # Replace with the actual script name
+          python eztvdaily.py  # Replace with the actual script name
 
       - name: Commit Changes
         run: |
