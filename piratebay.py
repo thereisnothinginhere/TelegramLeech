@@ -202,7 +202,7 @@ try:
                     existing_magnet_links.add(magnet)
     
             elapsed_time = time() - start_time
-            if elapsed_time > 0.2 * 60 * 60:  # 5 hours in seconds
+            if elapsed_time > 0.8 * 60 * 60:  # 5 hours in seconds
                 print("Stopping script after 2.5 hours.")
                 break
               
