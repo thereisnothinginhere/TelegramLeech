@@ -156,7 +156,7 @@ def get_mirrors():
         "https://1337x.st",
         "https://x1337x.se",
         "https://x1337x.ws",
-        "https://1337x.unblockit.li",
+        # "https://1337x.unblockit.li",
         "https://1337x.unblockninja.com",
         "https://x1337x.eu",
         "https://ww1.1337x.buzz",
