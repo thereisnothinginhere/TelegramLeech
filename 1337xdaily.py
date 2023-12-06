@@ -161,7 +161,7 @@ def get_mirrors():
         "https://x1337x.eu",
         "https://ww1.1337x.buzz",
         "https://1337x.proxybit.monster",
-        "https://1337x.unblockproject.casa",
+        # "https://1337x.unblockproject.casa",
         "https://1337x.wtf"
     ]
     return links
