@@ -1,4 +1,4 @@
-name: Fetch and Send Page
+name: 1TamilMV
 
 on:
   workflow_dispatch:
