@@ -152,17 +152,16 @@ from time import time, sleep
 
 def get_mirrors():
     links = [
-        "https://1337x.to",
-        "https://1337x.st",
-        "https://x1337x.se",
-        "https://x1337x.ws",
-        # "https://1337x.unblockit.li",
-        "https://1337x.unblockninja.com",
+        "https://1337x.wtf",
         "https://x1337x.eu",
-        "https://ww1.1337x.buzz",
-        "https://1337x.proxybit.monster",
-        # "https://1337x.unblockproject.casa",
-        "https://1337x.wtf"
+        "https://x1337x.ws",
+        "https://x1337x.se",
+        "https://1337x.st",
+        "https://1337xto.in",
+        "https://1337x.unblocked.ltda",
+        "https://www.1337x.st",
+        "https://1377x.to",
+        "https://www.13377x.tw/"
     ]
     return links
 
