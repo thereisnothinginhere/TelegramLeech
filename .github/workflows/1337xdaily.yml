@@ -2,8 +2,8 @@ name: 1337x Daily
 
 on:
   workflow_dispatch:
-  # schedule:
-  #   - cron: '0 */12 * * *'  # Run every 30 minutes
+  schedule:
+    - cron: '0 0 * * *'  # Run every day
     
 jobs:
   fetch-and-send:
