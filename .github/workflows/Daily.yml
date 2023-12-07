@@ -1,0 +1,47 @@
+name: 1337x Daily
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */12 * * *'  # Run every 12 hours
+    
+jobs:
+  fetch-and-send:
+    runs-on: ubuntu-latest
+    permissions:  
+      contents: write
+      
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y aria2 ffmpeg
+          pip install python-telegram-bot==13.15 seedrcc bs4
+
+      - name: Download telegram-bot-api
+        run: |
+          wget https://github.com/HeroBenHero/TelegramBotAPIServer/raw/main/telegram-bot-api
+          chmod 777 telegram-bot-api
+          nohup ./telegram-bot-api --api-hash e18a786351fb201760b000217ff60500 --api-id 10437406 --local &
+
+      - name: Run Fetch Script
+        run: |
+          python 1337xdaily.py  # Replace with the actual script name
+          python eztvdaily.py  # Replace with the actual script name
+
+      - name: Commit Changes
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git pull
+          git add magnet_links_1337x.txt magnet_links_eztv.txt
+          git commit -m "Downloaded and Updated magnet links"
+          git push
