@@ -32,9 +32,12 @@ jobs:
           chmod 777 telegram-bot-api
           nohup ./telegram-bot-api --api-hash e18a786351fb201760b000217ff60500 --api-id 10437406 --local &
 
-      - name: Run Fetch Script
+      - name: 1337x
         run: |
           python 1337xdaily.py  # Replace with the actual script name
+          
+      - name: eztv
+        run: |
           python eztvdaily.py  # Replace with the actual script name
 
       - name: Commit Changes
