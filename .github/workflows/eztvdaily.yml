@@ -2,8 +2,8 @@ name: EZTV Daily
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 */12 * * *'  # Run every 30 minutes
+  # schedule:
+  #   - cron: '0 */12 * * *'  # Run every 30 minutes
     
 jobs:
   fetch-and-send:
