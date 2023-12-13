@@ -2,8 +2,8 @@ name: Piratebay
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 * * * *'  # Run every hour
+  # schedule:
+  #   - cron: '0 * * * *'  # Run every hour
     
 jobs:
   fetch-and-send:
