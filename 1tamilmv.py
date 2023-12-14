@@ -195,9 +195,9 @@ try:
             # git_commit_process = subprocess.Popen('git commit -m "Updated"', shell=True, stdout=subprocess.PIPE)
             # git_commit_process.wait()
     
-            elapsed_time = time() - start_time
-            if elapsed_time > 0.2 * 60 * 60:  # 5 hours in seconds
-                print("Stopping script after 2.5 hours.")
-                break
+            # elapsed_time = time() - start_time
+            # if elapsed_time > 0.2 * 60 * 60:  # 5 hours in seconds
+            #     print("Stopping script after 2.5 hours.")
+            #     break
 except Exception as e:
     print("Error Occured :",e)
