@@ -21,7 +21,7 @@ account.authorize()
 seedr = Seedr(token=account.token)
 
 API_SERVER_URL = 'http://localhost:8081/bot'
-TELEGRAM_TOKEN = '5942550686:AAEkBVyp0U0zhP3z7ylmw4m2KS-pTD9UyZQ'
+TELEGRAM_TOKEN = '6840478942:AAHOiwNSwBrxJ6fwiiN29AzKgHpbd7-FCGY'
 chat_id = '-1002068315295' #@param {type:"string"}
 
 def convert_size(size_bytes):
