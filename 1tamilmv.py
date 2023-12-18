@@ -43,11 +43,10 @@ def generate_thumbnail(video_path, time, thumbnail_path):
     cmd = f'ffmpeg -i "{video_path}" -ss {time} -vframes 1 "{thumbnail_path}"'
     subprocess.call(cmd, shell=True)
 
+import time
+
 def send_video_file(file_path, thumbnail_path):
     print(f"Sending {file_path} to Telegram")
-
-    time = '00:00:01'
-    # generate_thumbnail(file_path, time, thumbnail_path)
 
     if not os.path.exists(file_path):
         print(f'File {file_path} not found.')
@@ -59,10 +58,20 @@ def send_video_file(file_path, thumbnail_path):
     duration = get_video_duration(file_path)
 
     with open(file_path, 'rb') as file, open('Thumbnail.jpg', 'rb') as thumb:
-        bot.send_video(chat_id=chat_id, video=file, duration=duration, thumb=thumb, timeout=999, caption=file_path)
+        while True:
+            try:
+                bot.send_video(chat_id=chat_id, video=file, duration=duration, thumb=thumb, timeout=999, caption=file_path)
+                print(f'Video {file_path} sent successfully!')
+                os.remove(file_path)
+                break
+            except Exception as e:
+                if 'Too many requests' in str(e):
+                    print('Too many requests, retrying after 8 seconds...')
+                    time.sleep(8)
+                else:
+                    print(f'An error occurred: {e}')
+                    break
 
-    print(f'Video {file_path} sent successfully!')
-    os.remove(file_path)
 
 def aria2_download(filename, link):
     print(f"Downloading {filename} with {link}")
