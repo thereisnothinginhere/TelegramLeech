@@ -148,7 +148,7 @@ def delete_all():
 import requests
 from bs4 import BeautifulSoup
 
-Site = "https://www.1tamilmv.phd/"  # @param {type:"string"}
+Site = "https://www.1tamilmv.im/"  # @param {type:"string"}
 filename = "magnet_links.txt"
 
 # Load existing magnet links from the file
