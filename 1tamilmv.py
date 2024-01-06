@@ -58,6 +58,7 @@ def send_video_file(file_path, thumbnail_path):
     bot = updater.bot
 
     duration = get_video_duration(file_path)
+    thumbnail_path='Thumbnail.jpg'
 
     try:
         with open(file_path, 'rb') as file, open(thumbnail_path, 'rb') as thumb:
