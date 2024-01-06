@@ -12,6 +12,7 @@ from time import sleep
 import urllib.parse
 from urllib.parse import unquote
 import requests
+from telegram.error import RetryAfter
 
 Username  = "herobenhero3@gmail.com" #@param {type:"string"}
 Password  = "NfrYj7JL@vID&amp;iznJL^VN" #@param {type:"string"}
@@ -58,8 +59,15 @@ def send_video_file(file_path, thumbnail_path):
 
     duration = get_video_duration(file_path)
 
-    with open(file_path, 'rb') as file, open('Thumbnail.jpg', 'rb') as thumb:
-        bot.send_video(chat_id=chat_id, video=file, duration=duration, thumb=thumb, timeout=999, caption=file_path)
+    try:
+        with open(file_path, 'rb') as file, open(thumbnail_path, 'rb') as thumb:
+            bot.send_video(chat_id=chat_id, video=file, duration=duration, thumb=thumb, timeout=999, caption=file_path)
+    except RetryAfter as e:
+        sleep_time = e.retry_after  # Get the required wait time from the exception
+        print(f"Rate limit exceeded. Sleeping for {sleep_time} seconds.")
+        sleep(sleep_time)  # Sleep for the required duration
+        with open(file_path, 'rb') as file, open(thumbnail_path, 'rb') as thumb:
+            bot.send_video(chat_id=chat_id, video=file, duration=duration, thumb=thumb, timeout=999, caption=file_path)  # Retry the request
 
     print(f'Video {file_path} sent successfully!')
     os.remove(file_path)
