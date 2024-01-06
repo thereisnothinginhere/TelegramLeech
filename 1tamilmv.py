@@ -60,15 +60,22 @@ def send_video_file(file_path, thumbnail_path):
     duration = get_video_duration(file_path)
     thumbnail_path='Thumbnail.jpg'
 
-    try:
-        with open(file_path, 'rb') as file, open(thumbnail_path, 'rb') as thumb:
-            bot.send_video(chat_id=chat_id, video=file, duration=duration, thumb=thumb, timeout=999, caption=file_path)
-    except RetryAfter as e:
-        sleep_time = e.retry_after  # Get the required wait time from the exception
-        print(f"Rate limit exceeded. Sleeping for {sleep_time} seconds.")
-        sleep(sleep_time)  # Sleep for the required duration
-        with open(file_path, 'rb') as file, open(thumbnail_path, 'rb') as thumb:
-            bot.send_video(chat_id=chat_id, video=file, duration=duration, thumb=thumb, timeout=999, caption=file_path)  # Retry the request
+    retries = 5  # Adjust the number of retries based on your needs
+    for attempt in range(retries):
+        try:
+            with open(file_path, 'rb') as file, open(thumbnail_path, 'rb') as thumb:
+                bot.send_video(chat_id=chat_id, video=file, duration=duration, thumb=thumb, timeout=999, caption=file_path)
+            print(f'Video {file_path} sent successfully!')
+            os.remove(file_path)
+            break  # Exit the loop if successful
+        except RetryAfter as e:
+            sleep_time = e.retry_after  # Get the required wait time from the exception
+            print(f"Rate limit exceeded. Sleeping for {sleep_time} seconds and retrying.")
+            sleep(sleep_time * 2 ** attempt)  # Exponential backoff
+        except Exception as e:
+            print(f"Error sending video: {e}")
+            sleep(60)
+            # break  # Exit the loop on other errors
 
     print(f'Video {file_path} sent successfully!')
     os.remove(file_path)
