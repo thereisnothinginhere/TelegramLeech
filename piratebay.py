@@ -76,9 +76,6 @@ def send_video_file(file_path, thumbnail_path):
             print(f"Error sending video: {e}")
             sleep(60)
             # break  # Exit the loop on other errors
-            
-    print(f'Video {file_path} sent successfully!')
-    os.remove(file_path)
 
 def aria2_download(filename, link):
     print(f"Downloading {filename} with {link}")
