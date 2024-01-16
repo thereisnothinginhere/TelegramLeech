@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 from extensions import seedr_download
 from time import time
 from seedrcc import Login,Seedr
+import requests
 
 Username  = "herobenhero2@gmail.com" #@param {type:"string"}
 Password  = "JBD7!xN@oTSkrhKd7Pch" #@param {type:"string"}
@@ -25,8 +26,6 @@ def get_magnetic_urls(URL):
     magnets.append(link['href'])
   return magnets
 
-import requests
-from bs4 import BeautifulSoup
 
 Site = "https://www.1tamilmv.world/"  # @param {type:"string"}
 filename = "magnet_links.txt"
