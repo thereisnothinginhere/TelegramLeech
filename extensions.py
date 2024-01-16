@@ -10,12 +10,6 @@ API_SERVER_URL = 'http://localhost:8081/bot'
 TELEGRAM_TOKEN = '5942550686:AAEkBVyp0U0zhP3z7ylmw4m2KS-pTD9UyZQ'
 chat_id = '-1002068315295' #@param {type:"string"}
 
-def seedr_login(Username, Password):
-    account = Login(Username, Password)
-    account.authorize()
-    seedr = Seedr(token=account.token)
-    return seedr
-
 def convert_size(size_bytes):
     """Convert the size in bytes to a more human-readable format."""
     if size_bytes == 0:
