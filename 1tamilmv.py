@@ -1,137 +1,6 @@
 from bs4 import BeautifulSoup
-from time import sleep,time
-import subprocess
-import os
-import random
-import subprocess
-from telegram import Bot, InputMediaVideo
-from telegram.ext import Updater
-import math
-from seedrcc import Login,Seedr
-from time import sleep
-import urllib.parse
-from urllib.parse import unquote
-import requests
-from telegram.error import RetryAfter
-
-Username  = "herobenhero2@gmail.com" #@param {type:"string"}
-Password  = "JBD7!xN@oTSkrhKd7Pch" #@param {type:"string"}
-
-account = Login(Username, Password)
-account.authorize()
-seedr = Seedr(token=account.token)
-
-API_SERVER_URL = 'http://localhost:8081/bot'
-TELEGRAM_TOKEN = '5942550686:AAEkBVyp0U0zhP3z7ylmw4m2KS-pTD9UyZQ'
-chat_id = '-1002068315295' #@param {type:"string"}
-
-def convert_size(size_bytes):
-    """Convert the size in bytes to a more human-readable format."""
-    if size_bytes == 0:
-        return "0B"
-    size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
-    i = int(math.floor(math.log(size_bytes, 1024)))
-    p = math.pow(1024, i)
-    s = round(size_bytes / p, 2)
-    return f"{s} {size_name[i]}"
-
-def get_video_duration(file_path):
-    cmd = f'ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "{file_path}"'
-    output = subprocess.check_output(cmd, shell=True).decode('utf-8').strip()
-    return int(float(output))
-
-def generate_thumbnail(video_path, time, thumbnail_path):
-    cmd = f'ffmpeg -i "{video_path}" -ss {time} -vframes 1 "{thumbnail_path}"'
-    subprocess.call(cmd, shell=True)
-
-def send_video_file(file_path, thumbnail_path):
-    print(f"Sending {file_path} to Telegram")
-
-    time = '00:00:01'
-    # generate_thumbnail(file_path, time, thumbnail_path)
-
-    if not os.path.exists(file_path):
-        print(f'File {file_path} not found.')
-        return
-
-    updater = Updater(token=TELEGRAM_TOKEN, use_context=True, base_url=API_SERVER_URL)
-    bot = updater.bot
-
-    duration = get_video_duration(file_path)
-    thumbnail_path='Thumbnail.jpg'
-
-    retries = 5  # Adjust the number of retries based on your needs
-    for attempt in range(retries):
-        try:
-            with open(file_path, 'rb') as file, open(thumbnail_path, 'rb') as thumb:
-                bot.send_video(chat_id=chat_id, video=file, duration=duration, thumb=thumb, timeout=999, caption=file_path)
-            print(f'Video {file_path} sent successfully!')
-            os.remove(file_path)
-            break  # Exit the loop if successful
-        except RetryAfter as e:
-            sleep_time = e.retry_after  # Get the required wait time from the exception
-            print(f"Rate limit exceeded. Sleeping for {sleep_time} seconds and retrying.")
-            sleep(sleep_time * 2 ** attempt)  # Exponential backoff
-        except Exception as e:
-            print(f"Error sending video: {e}")
-            sleep(60)
-            # break  # Exit the loop on other errors
-
-def aria2_download(filename, link):
-    print(f"Downloading {filename} with {link}")
-
-    command = f"aria2c -o '{filename}' --summary-interval=1 --max-connection-per-server=2 '{link}'"
-
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
-    process.wait()
-
-    send_video_file(filename, filename +'.jpg')
-
-def seedr_download(MagneticURL):
-  add=seedr.addTorrent(MagneticURL)
-  if add["result"]==True:
-    table=seedr.listContents()
-    i = 0
-    last_progress = -1
-    while len(table['torrents']) != 0 and i < 30:
-        for torrent in table['torrents']:
-            size = convert_size(torrent['size'])
-            print(f"{torrent['id']}: {torrent['name']}, {size}, {torrent['progress']}%")
-            if last_progress != torrent['progress']:
-                i = 0
-                last_progress = torrent['progress']
-        table = seedr.listContents()
-        sleep(1)
-        i += 1
-        if i==15:
-          seedr.deleteTorrent(torrent['id'])
-          break
-
-    if len(table['folders']) != 0:
-        print("Completed torrents:")
-        for folder in table['folders']:
-            print()
-            size = convert_size(folder['size'])
-            print(f"{folder['id']}: {folder['name']}, {size}")
-            table=seedr.listContents(folder['id'])
-            # seedr.deleteFolder(folder['id'])
-            if len(table['files']) == 0:
-                print("No files in this folder.")
-            else:
-                print("\tFiles:")
-                for file in table['files']:
-                    print(f"\t{file['folder_file_id']}: {file['name']}, {convert_size(file['size'])}, Video={file['play_video']}")
-                    if file['play_video']==True:
-                      if file['size'] / (1024**3) < 1.95:
-                          link=seedr.fetchFile(file['folder_file_id'])
-                          # print('\t',link["url"])
-                          quoted_link = urllib.parse.unquote(link["url"])
-                          encoded_url = urllib.parse.quote(quoted_link, safe=':/?&=()[]')
-                          # print(encoded_url)
-                          aria2_download(file['name'],encoded_url)
-                      else:
-                        print(f"File size {convert_size(file['size'])} is Greater than 2GB")
-            seedr.deleteFolder(folder['id'])
+from extensions import seedr_download
+from time import time
 
 def get_magnetic_urls(URL):
   # Send an HTTP request to the web server
@@ -147,16 +16,6 @@ def get_magnetic_urls(URL):
   for link in magnetic_links:
     magnets.append(link['href'])
   return magnets
-
-def delete_all():
-    #@title **List All**
-    table=seedr.listContents()
-    if len(table['torrents']) != 0:
-        for torrent in table['torrents']:
-            seedr.deleteTorrent(torrent['id'])
-    if len(table['folders']) != 0:
-        for folder in table['folders']:
-            seedr.deleteFolder(folder['id'])
 
 import requests
 from bs4 import BeautifulSoup
@@ -183,8 +42,6 @@ links = {link.get('href') for link in links if link.get('href') is not None}
 
 # subprocess.Popen('git config user.name "GitHub Actions"', shell=True, stdout=subprocess.PIPE)
 # subprocess.Popen('git config user.email "actions@github.com"', shell=True, stdout=subprocess.PIPE)
-delete_all()
-
 try:
     # Open the file in append mode to add new magnet links
     with open(filename, "a") as file:
