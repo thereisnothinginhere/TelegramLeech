@@ -1,23 +1,21 @@
-
 from time import sleep
 import subprocess
 import os
 from telegram.ext import Updater
 import math
-from seedrcc import Login,Seedr
 import urllib.parse
 from telegram.error import RetryAfter
-
-Username  = "herobenhero2@gmail.com" #@param {type:"string"}
-Password  = "JBD7!xN@oTSkrhKd7Pch" #@param {type:"string"}
-
-account = Login(Username, Password)
-account.authorize()
-seedr = Seedr(token=account.token)
+from seedrcc import Login,Seedr
 
 API_SERVER_URL = 'http://localhost:8081/bot'
 TELEGRAM_TOKEN = '5942550686:AAEkBVyp0U0zhP3z7ylmw4m2KS-pTD9UyZQ'
 chat_id = '-1002068315295' #@param {type:"string"}
+
+def seedr_login(Username, Password):
+    account = Login(Username, Password)
+    account.authorize()
+    seedr = Seedr(token=account.token)
+    return seedr
 
 def convert_size(size_bytes):
     """Convert the size in bytes to a more human-readable format."""
@@ -81,7 +79,7 @@ def aria2_download(filename, link):
 
     send_video_file(filename, filename +'.jpg')
 
-def delete_all():
+def delete_all(seedr):
     #@title **List All**
     table=seedr.listContents()
     if len(table['torrents']) != 0:
@@ -91,8 +89,8 @@ def delete_all():
         for folder in table['folders']:
             seedr.deleteFolder(folder['id'])
 
-def seedr_download(MagneticURL):
-  delete_all()
+def seedr_download(MagneticURL,seedr):
+  delete_all(seedr)
   add=seedr.addTorrent(MagneticURL)
   print(add)
   if add["result"]==True:
@@ -134,7 +132,7 @@ def seedr_download(MagneticURL):
                           quoted_link = urllib.parse.unquote(link["url"])
                           encoded_url = urllib.parse.quote(quoted_link, safe=':/?&=()[]')
                           # print(encoded_url)
-                          aria2_download(file['name'],encoded_url)
+                        #   aria2_download(file['name'],encoded_url)
                       else:
                         print(f"File size {convert_size(file['size'])} is Greater than 2GB")
             seedr.deleteFolder(folder['id'])

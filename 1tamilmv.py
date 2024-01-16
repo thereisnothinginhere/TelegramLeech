@@ -1,6 +1,14 @@
 from bs4 import BeautifulSoup
 from extensions import seedr_download
 from time import time
+from seedrcc import Login,Seedr
+
+Username  = "herobenhero2@gmail.com" #@param {type:"string"}
+Password  = "JBD7!xN@oTSkrhKd7Pch" #@param {type:"string"}
+
+account = Login(Username, Password)
+account.authorize()
+seedr = Seedr(token=account.token)
 
 def get_magnetic_urls(URL):
   # Send an HTTP request to the web server
@@ -51,7 +59,7 @@ try:
             for magnet in magnets:
                 if magnet not in existing_magnet_links:
                     # Write new magnet links to the file
-                    seedr_download(magnet)
+                    seedr_download(magnet,seedr)
                     file.write(magnet + "\n")
                     existing_magnet_links.add(magnet)
     
