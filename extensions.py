@@ -5,7 +5,6 @@ from telegram.ext import Updater
 import math
 import urllib.parse
 from telegram.error import RetryAfter
-from seedrcc import Login,Seedr
 
 API_SERVER_URL = 'http://localhost:8081/bot'
 TELEGRAM_TOKEN = '5942550686:AAEkBVyp0U0zhP3z7ylmw4m2KS-pTD9UyZQ'
@@ -68,6 +67,8 @@ def send_video_file(file_path, thumbnail_path):
             print(f"Error sending video: {e}")
             sleep(60)
             # break  # Exit the loop on other errors
+    print(f'Video {file_path} sent successfully!')
+    os.remove(file_path)
 
 def aria2_download(filename, link):
     print(f"Downloading {filename} with {link}")
@@ -132,7 +133,7 @@ def seedr_download(MagneticURL,seedr):
                           quoted_link = urllib.parse.unquote(link["url"])
                           encoded_url = urllib.parse.quote(quoted_link, safe=':/?&=()[]')
                           # print(encoded_url)
-                        #   aria2_download(file['name'],encoded_url)
+                          aria2_download(file['name'],encoded_url)
                       else:
                         print(f"File size {convert_size(file['size'])} is Greater than 2GB")
             seedr.deleteFolder(folder['id'])
