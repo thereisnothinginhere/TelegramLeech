@@ -8,7 +8,6 @@ from telegram.error import RetryAfter
 
 API_SERVER_URL = 'http://localhost:8081/bot'
 TELEGRAM_TOKEN = '5942550686:AAEkBVyp0U0zhP3z7ylmw4m2KS-pTD9UyZQ'
-chat_id = '-1002068315295' #@param {type:"string"}
 
 def convert_size(size_bytes):
     """Convert the size in bytes to a more human-readable format."""
@@ -29,7 +28,7 @@ def generate_thumbnail(video_path, time, thumbnail_path):
     cmd = f'ffmpeg -i "{video_path}" -ss {time} -vframes 1 "{thumbnail_path}"'
     subprocess.call(cmd, shell=True)
 
-def send_video_file(file_path, thumbnail_path):
+def send_video_file(file_path, thumbnail_path, chat_id):
     print(f"Sending {file_path} to Telegram")
 
     time = '00:00:01'
@@ -62,7 +61,7 @@ def send_video_file(file_path, thumbnail_path):
             sleep(60)
             # break  # Exit the loop on other errors
 
-def aria2_download(filename, link):
+def aria2_download(filename, link, chat_id):
     print(f"Downloading {filename} with {link}")
 
     command = f"aria2c -o '{filename}' --summary-interval=1 --max-connection-per-server=2 '{link}'"
@@ -70,7 +69,7 @@ def aria2_download(filename, link):
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
     process.wait()
 
-    send_video_file(filename, filename +'.jpg')
+    send_video_file(filename, filename +'.jpg', chat_id)
 
 def delete_all(seedr):
     #@title **List All**
@@ -82,7 +81,7 @@ def delete_all(seedr):
         for folder in table['folders']:
             seedr.deleteFolder(folder['id'])
 
-def seedr_download(MagneticURL,seedr):
+def seedr_download(MagneticURL,seedr, chat_id):
   delete_all(seedr)
   add=seedr.addTorrent(MagneticURL)
 #   print(add)
@@ -125,7 +124,7 @@ def seedr_download(MagneticURL,seedr):
                           quoted_link = urllib.parse.unquote(link["url"])
                           encoded_url = urllib.parse.quote(quoted_link, safe=':/?&=()[]')
                           # print(encoded_url)
-                          aria2_download(file['name'],encoded_url)
+                          aria2_download(file['name'],encoded_url, chat_id)
                       else:
                         print(f"File size {convert_size(file['size'])} is Greater than 2GB")
             seedr.deleteFolder(folder['id'])

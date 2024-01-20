@@ -6,6 +6,7 @@ import requests
 
 Username  = "herobenhero4@gmail.com" #@param {type:"string"}
 Password  = "Ge^j)&amp;H&amp;VkpBYwNmP247R" #@param {type:"string"}
+chat_id = '-1002111866259'
 
 account = Login(Username, Password)
 account.authorize()
@@ -62,7 +63,7 @@ else:
                 for magnet in magnets:
                     # print(magnet)
                     if magnet not in existing_magnet_links:
-                        seedr_download(magnet,seedr)
+                        seedr_download(magnet,seedr,chat_id)
                         file.write(magnet + "\n")
                         existing_magnet_links.add(magnet)
     

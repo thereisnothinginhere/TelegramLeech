@@ -4,9 +4,9 @@ from time import time
 from seedrcc import Login,Seedr
 import requests
 
-
 Username  = "herobenhero3@gmail.com" #@param {type:"string"}
 Password  = "NfrYj7JL@vID&amp;iznJL^VN" #@param {type:"string"}
+chat_id = '-1001826079620'
 
 account = Login(Username, Password)
 account.authorize()
@@ -78,7 +78,7 @@ try:
             for magnet in magnets:
                 if magnet not in existing_magnet_links:
                     # Write new magnet links to the file
-                    seedr_download(magnet,seedr)
+                    seedr_download(magnet,seedr,chat_id)
                     file.write(magnet + "\n")
                     existing_magnet_links.add(magnet)
     
