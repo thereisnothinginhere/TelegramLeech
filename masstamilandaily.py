@@ -3,7 +3,7 @@ from extensions import aria2_download
 from time import time
 import requests
 
-chat_id = '-1002068315295'
+chat_id = '-1002059773940'
 
 filename = "masstamilan_links.txt"
 
