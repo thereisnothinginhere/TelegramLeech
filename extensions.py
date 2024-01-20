@@ -61,6 +61,26 @@ def send_video_file(file_path, thumbnail_path, chat_id):
             sleep(60)
             # break  # Exit the loop on other errors
 
+def get_audio_duration(file_path):
+    cmd = f'ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "{file_path}"'
+    output = subprocess.check_output(cmd, shell=True).decode('utf-8').strip()
+    return int(float(output))
+
+def send_audio_file(file_path,chat_id):
+    if not os.path.exists(file_path):
+        print(f'File {file_path} not found.')
+        return
+
+    updater = Updater(token=TELEGRAM_TOKEN, use_context=True, base_url=API_SERVER_URL)
+    bot = updater.bot
+
+    duration = get_audio_duration(file_path)
+
+    with open(file_path, 'rb') as file:
+        bot.send_audio(chat_ibotd=chat_id, audio=file, duration=duration, timeout=999)
+
+    print(f'Audio {file_path} sent successfully!')
+
 def aria2_download(filename, link, chat_id):
     print(f"Downloading {filename} with {link}")
 
@@ -69,7 +89,10 @@ def aria2_download(filename, link, chat_id):
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
     process.wait()
 
-    send_video_file(filename, filename +'.jpg', chat_id)
+    if ".mp3" in filename:
+        send_audio_file(filename,chat_id)
+    else:
+        send_video_file(filename, filename +'.jpg', chat_id)
 
 def delete_all(seedr):
     #@title **List All**
