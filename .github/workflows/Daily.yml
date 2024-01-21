@@ -49,6 +49,6 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git pull
-          git add magnet_links_1337x.txt magnet_links_eztv.txt
+          git add magnet_links_1337x.txt magnet_links_eztv.txt magnet_links_yts.txt
           git commit -m "Downloaded and Updated magnet links"
           git push
