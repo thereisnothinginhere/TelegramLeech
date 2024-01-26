@@ -44,11 +44,15 @@ jobs:
         run: |
           python ytsdaily.py  # Replace with the actual script name
 
+      - name: masstamilan
+        run: |
+          python masstamilandaily.py  # Replace with the actual script name
+
       - name: Commit Changes
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git pull
-          git add magnet_links_1337x.txt magnet_links_eztv.txt magnet_links_yts.txt
-          git commit -m "Downloaded and Updated magnet links"
+          git add magnet_links_1337x.txt magnet_links_eztv.txt magnet_links_yts.txt masstamilan_links.txt
+          git commit -m "Downloaded and Updated links"
           git push
