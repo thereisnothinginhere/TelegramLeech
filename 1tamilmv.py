@@ -3,13 +3,11 @@ from extensions import delete_all,seedr_download,aria2_download,upload_video
 from time import time
 from seedrcc import Login,Seedr
 import requests
+import subprocess
 import os
 
-# Username  = "herobenhero2@gmail.com" #@param {type:"string"}
-# Password  = "JBD7!xN@oTSkrhKd7Pch" #@param {type:"string"}
-
-Username  = "herobenhero5@gmail.com" #@param {type:"string"}
-Password  = "zyHyuTfaGiC6:uP" #@param {type:"string"}
+Username  = "herobenhero2@gmail.com" #@param {type:"string"}
+Password  = "JBD7!xN@oTSkrhKd7Pch" #@param {type:"string"}
 
 chat_id = '-1002068315295'
 
@@ -32,7 +30,12 @@ Site = "https://www.1tamilmv.ac/"  # @param {type:"string"}
 
 delete_all(seedr)
 
-filename = "magnet_links.txt"  # @param {type:"string"}
+filename = "magnet_links.txt"
+
+# Initial sync to fetch existing magnet links
+command = f"rclone sync College:/Shared/Telegram/{filename} ./"
+process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
+process.communicate()  # Wait for initial sync to complete
 
 # Fetching links
 response = requests.get(Site)
@@ -46,17 +49,24 @@ try:
 except FileNotFoundError:
     existing_magnet_links = set()
 
-# Open the file, write the magnet link, and close it immediately
-with open(filename, "a") as file:
-    for site in sorted(links):
-        magnets = get_magnetic_urls(site)
-        for magnet in reversed(magnets):  # You might want to sort this if needed
-            if magnet not in existing_magnet_links:
-                id, urls = seedr_download(magnet,seedr)
-                for filepath, encoded_url in urls.items():
-                    aria2_download(filepath, encoded_url)
-                    upload_video(chat_id,filepath,THUMBNAIL_PATH)
-                seedr.deleteFolder(id)
+for site in sorted(links):
+    magnets = get_magnetic_urls(site)
+    for magnet in reversed(magnets):  # You might want to sort this if needed
+        if magnet not in existing_magnet_links:
+            id, urls = seedr_download(magnet, seedr)
+            for filepath, encoded_url in urls.items():
+                aria2_download(filepath, encoded_url)
+                upload_video(chat_id, filepath, THUMBNAIL_PATH)
+            seedr.deleteFolder(id)
+
+            # Write new magnet to the file
+            with open(filename, "a") as file:
                 file.write(magnet + "\n")
-                file.flush()  # Ensure data is written immediately
-                existing_magnet_links.add(magnet)
+                file.flush()
+
+            # Sync the updated file
+            command = f"rclone sync ./{filename} College:/Shared/Telegram/{filename}"
+            process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
+            process.communicate()  # Wait for sync to complete
+
+            existing_magnet_links.add(magnet)
