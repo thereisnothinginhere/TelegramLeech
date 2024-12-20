@@ -25,7 +25,6 @@ def get_magnetic_urls(URL):
     magnets = [link['href'] for link in magnetic_links]
     return magnets
 
-
 Site = "https://www.1tamilmv.ac/"  # @param {type:"string"}
 
 delete_all(seedr)
@@ -65,8 +64,8 @@ for site in sorted(links):
                 file.flush()
 
             # Sync the updated file
-            command = f"rclone sync ./{filename} College:/Shared/Telegram/{filename}"
+            command = f"rclone sync ./{filename} College:/Shared/Telegram/"
             process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
-            process.communicate()  # Wait for sync to complete
+            # process.communicate()  # Wait for sync to complete
 
             existing_magnet_links.add(magnet)
