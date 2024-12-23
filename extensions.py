@@ -39,19 +39,22 @@ def upload_video(CHAT_ID, file_path, thumbnail_path=None):
 
     print("Uploading Video...")
     while True:
-        with open(file_path, 'rb') as video, open(thumbnail_path, 'rb') as thumb:
-            files = {'video': video, 'thumb': thumb}
-            data = {'chat_id': CHAT_ID, 'duration': duration, 'caption': caption}
-            response = requests.post(f"{API_SERVER_URL}{TELEGRAM_TOKEN}/sendVideo", files=files, data=data)
-            response_data = response.json()
-            if response_data['ok']:
-                print(f'Video {file_path} sent successfully!')
-                os.remove(file_path)
-                break
-            else:
-                print(response_data)
-                print(f'Failed to send video {file_path}. Retrying in 30 seconds...')
-                sleep(30)
+        try:
+            with open(file_path, 'rb') as video, open(thumbnail_path, 'rb') as thumb:
+                files = {'video': video, 'thumb': thumb}
+                data = {'chat_id': CHAT_ID, 'duration': duration, 'caption': caption}
+                response = requests.post(f"{API_SERVER_URL}{TELEGRAM_TOKEN}/sendVideo", files=files, data=data)
+                response_data = response.json()
+                if response_data['ok']:
+                    print(f'Video {file_path} sent successfully!')
+                    os.remove(file_path)
+                    break
+                else:
+                    print(response_data)
+                    print(f'Failed to send video {file_path}. Retrying in 30 seconds...')
+                    sleep(30)
+        except:
+            continue
 
 def convert_size(size_bytes):
     """Convert the size in bytes to a more human-readable format."""
