@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from extensions import seedr_download
+from extensions import delete_all,seedr_download,aria2_download,upload_video
 from time import time
 from seedrcc import Login,Seedr
 import requests
@@ -11,6 +11,8 @@ chat_id = '-1002111866259'
 account = Login(Username, Password)
 account.authorize()
 seedr = Seedr(token=account.token)
+
+THUMBNAIL_PATH = 'Thumbnail.jpg' #@param {type:"string"}
 
 def get_magnetic_urls(URL):
   # Send an HTTP request to the web server
@@ -40,6 +42,7 @@ def scrape_links(site_url):
     return links
 
 existing_magnet_links = set()
+delete_all(seedr)
 
 for mirror_site in get_mirrors():
     links = scrape_links(mirror_site)
@@ -63,9 +66,13 @@ else:
                 for magnet in magnets:
                     # print(magnet)
                     if magnet not in existing_magnet_links:
-                        seedr_download(magnet,seedr,chat_id)
+                        id, urls = seedr_download(magnet, seedr)
+                        for filepath, encoded_url in urls.items():
+                            aria2_download(filepath, encoded_url)
+                            upload_video(chat_id, filepath, THUMBNAIL_PATH)
+                        seedr.deleteFolder(id)
                         file.write(magnet + "\n")
-                        existing_magnet_links.add(magnet)
+                        file.flush()  # Ensure data is written immediately
     
                 # elapsed_time = time() - start_time
                 # if elapsed_time > 0.2 * 60 * 60:  # 2.5 hours in seconds
