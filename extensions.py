@@ -14,9 +14,12 @@ API_ID = '10437406'
 API_SERVER_URL = 'http://localhost:8081/bot'
 
 def get_video_duration(file_path):
-    cmd_duration = f'ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "{file_path}"'
-    output_duration = subprocess.check_output(cmd_duration, shell=True).decode('utf-8').strip()
-    return int(float(output_duration))
+    try:
+        cmd_duration = f'ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "{file_path}"'
+        output_duration = subprocess.check_output(cmd_duration, shell=True).decode('utf-8').strip()
+        return int(float(output_duration))
+    except:
+        return 0
 
 def generate_thumbnail(file_path):
     thumbnail_path = 'Sample.jpg'
