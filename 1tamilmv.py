@@ -22,7 +22,7 @@ def get_magnetic_urls(URL):
     magnets = [link['href'] for link in magnetic_links]
     return magnets
 
-Site = "https://www.1tamilmv.ac/"  # @param {type:"string"}
+Site = "https://www.1tamilmv.tw/"  # @param {type:"string"}
 
 delete_all(seedr)
 
