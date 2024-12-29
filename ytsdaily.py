@@ -3,6 +3,7 @@ from extensions import delete_all,seedr_download,aria2_download,upload_video
 from time import time
 from seedrcc import Login,Seedr
 import requests
+import subprocess
 
 Username  = "herobenhero6@gmail.com" #@param {type:"string"}
 Password  = "WD4.8tTrZhbimB!" #@param {type:"string"}
@@ -32,7 +33,7 @@ def get_magnetic_urls(URL):
 
 Site = "https://yts.mx/"  # @param {type:"string"}
 filename = "magnet_links_yts.txt"
-
+subprocess.run(["rclone", "copy", f"College:Shared/Telegram/{filename}", "."])
 # Load existing magnet links from the file
 try:
     with open(filename, "r") as file:
@@ -67,6 +68,7 @@ try:
                     seedr.deleteFolder(id)
                     file.write(magnet + "\n")
                     file.flush()  # Ensure data is written immediately
+                    subprocess.run(["rclone", "sync", f"{filename}", "College:Shared/Telegram/"])
     
             # git_add_process = subprocess.Popen("sh git.sh", shell=True, stdout=subprocess.PIPE)
             # git_add_process.wait()
