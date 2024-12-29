@@ -47,7 +47,6 @@ def upload_video(CHAT_ID, file_path, thumbnail_path=None):
                 response_data = response.json()
                 if response_data['ok']:
                     print(f'Video {file_path} sent successfully!')
-                    os.remove(file_path)
                     break
                 else:
                     print(response_data)
