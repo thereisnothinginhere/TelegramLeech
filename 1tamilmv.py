@@ -42,6 +42,8 @@ try:
 except FileNotFoundError:
     existing_sites = set()
 
+delete_all(seedr)
+
 with open(sites_filename, "a") as sites_file:
     for site in sorted(links):
         last_part = get_last_part(site)
