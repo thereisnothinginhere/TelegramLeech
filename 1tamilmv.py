@@ -22,7 +22,7 @@ def get_magnetic_urls(URL):
     magnetic_links = soup.find_all('a', href=lambda x: x and x.startswith('magnet:'))
     return [link['href'] for link in magnetic_links]
 
-Site = "https://www.1tamilmv.sale/"
+Site = "https://www.1tamilmv.legal/"
 
 sites_filename = "1tamilmv_index.txt"
 
