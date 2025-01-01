@@ -55,7 +55,7 @@ with open(sites_filename, "a") as sites_file:
             id, urls = seedr_download(magnet, seedr)
             for filepath, encoded_url in urls.items():
                 aria2_download(filepath, encoded_url)
-                upload_video(chat_id, c, THUMBNAIL_PATH)
+                upload_video(chat_id, filepath, THUMBNAIL_PATH)
                 os.remove(filepath)
             seedr.deleteFolder(id)
         sites_file.write(last_part + "\n")
