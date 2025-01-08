@@ -5,6 +5,13 @@ import requests
 import os
 import subprocess
 
+import time
+import sys
+
+if len(sys.argv) > 1:
+    start_time = time.time()
+    max_duration = int(sys.argv[1]) * 60  # Convert minutes to seconds
+
 Username = "herobenhero2@gmail.com"
 Password = "JBD7!xN@oTSkrhKd7Pch"
 chat_id = '-1002068315295'
@@ -63,3 +70,8 @@ with open(sites_filename, "a") as sites_file:
         existing_sites.add(last_part)
         # Sync the updated sites file using rclone
         subprocess.run(["rclone", "sync", f"{sites_filename}", "College:Shared/Telegram/"])
+        if len(sys.argv) > 1:
+            elapsed_time = time.time() - start_time
+            if elapsed_time > max_duration:
+                print("Maximum duration exceeded, terminating script.")
+                break
