@@ -8,9 +8,25 @@ import subprocess
 import time
 import sys
 
+import threading
+import time
+import sys
+import subprocess
+import os
+
+def run_script(script_name):
+    subprocess.run(["python", script_name])
+
 if len(sys.argv) > 1:
     start_time = time.time()
     max_duration = int(sys.argv[1]) * 60  # Convert minutes to seconds
+    # Start background threads
+    scripts = ["1337xdaily.py", "eztvdaily.py", "piratebay.py", "ytsdaily.py"]
+    threads = []
+    for script in scripts:
+        thread = threading.Thread(target=run_script, args=(script,))
+        thread.start()
+        threads.append(thread)
 
 Username = "herobenhero2@gmail.com"
 Password = "JBD7!xN@oTSkrhKd7Pch"
