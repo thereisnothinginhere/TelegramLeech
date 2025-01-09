@@ -129,10 +129,15 @@ def aria2_download(filename, link):
     print(f"Downloading {filename} with {link}")
 
     command = f"aria2c -o '{filename}' -c -s 16 -x 16 -k 1M -j 1 '{link}'"
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
-    process.wait()
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    
+    stdout, stderr = process.communicate()
+    
+    if process.returncode != 0:
+        print(f"Download error: {stderr.decode('utf-8')}")
+        return 0
+    
     print(f"Download completed for {filename}")
-
     return filename
 
 def check_bot_status():
