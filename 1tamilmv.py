@@ -63,7 +63,7 @@ def main():
     soup = BeautifulSoup(response.text, 'html.parser')
     links = [link['href'] for link in soup.find_all('a', href=lambda x: x and x.startswith(Site + 'index.php?/forums/topic/'))]
 
-    for site in sorted(links, reverse=True):
+    for site in sorted(links):
         current_index = get_index_from_url(site)
         
         if current_index <= largest_known_index:
