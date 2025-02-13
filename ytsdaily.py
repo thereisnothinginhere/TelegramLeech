@@ -3,7 +3,8 @@ from extensions import delete_all,seedr_download,aria2_download,upload_video
 from time import time
 from seedrcc import Login,Seedr
 import requests
-import subprocess
+import re
+import os
 
 Username  = "herobenhero6@gmail.com" #@param {type:"string"}
 Password  = "WD4.8tTrZhbimB!" #@param {type:"string"}
@@ -32,14 +33,21 @@ def get_magnetic_urls(URL):
 
 
 Site = "https://yts.mx/"  # @param {type:"string"}
-filename = "magnet_links_yts.txt"
-subprocess.run(["rclone", "copy", f"College:Shared/Telegram/{filename}", "."])
-# Load existing magnet links from the file
-try:
-    with open(filename, "r") as file:
-        existing_magnet_links = set(file.read().splitlines())
-except FileNotFoundError:
-    existing_magnet_links = set()
+
+def extract_btih(magnet):
+    match = re.search(r'btih:([a-fA-F0-9]{40})', magnet)
+    return match.group(1).lower() if match else None
+
+def check_btih_exists(btih):
+    response = requests.get(f"https://db.herobenhero.workers.dev/SELECT COUNT(*) AS count FROM magnets WHERE \"hash\" = '{btih}';")
+    if response.status_code == 200:
+        data = response.json()
+        if data.get('success') and 'results' in data:
+            return data['results'][0]['count'] > 0
+    return False
+
+def add_btih(btih):
+    requests.post(f"https://db.herobenhero.workers.dev/INSERT INTO magnets ('hash') VALUES ('{btih}')")
 
 # Send an HTTP request to the web server
 response = requests.get(Site)
@@ -47,42 +55,23 @@ response = requests.get(Site)
 # Parse the HTML code of the web page
 soup = BeautifulSoup(response.text, 'html.parser')
 
-# Find all the links on the page that start with https://www.1tamilmv.autos/index.php?/forums/topic/
+# Find all the links on the page that start with the specified Site URL and 'movies/'
 links = soup.find_all('a', href=lambda x: x and x.startswith(Site+'movies/'))
 links = {link.get('href') for link in links if link.get('href') is not None}
 
-# subprocess.Popen('git config user.name "GitHub Actions"', shell=True, stdout=subprocess.PIPE)
-# subprocess.Popen('git config user.email "actions@github.com"', shell=True, stdout=subprocess.PIPE)
 try:
-    # Open the file in append mode to add new magnet links
-    with open(filename, "a") as file:
-        start_time = time()
-        for link in links:
-            magnets = get_magnetic_urls(link)
-            for magnet in magnets:
-                if magnet not in existing_magnet_links:
-                    id, urls = seedr_download(magnet, seedr)
-                    for filepath, encoded_url in urls.items():
-                        aria2_download(filepath, encoded_url)
+    for link in links:
+        magnets = get_magnetic_urls(link)
+        for magnet in magnets:
+            btih = extract_btih(magnet)
+            if btih and not check_btih_exists(btih):
+                id, urls = seedr_download(magnet, seedr)
+                for filepath, encoded_url in urls.items():
+                    if aria2_download(filepath, encoded_url):
                         upload_video(chat_id, filepath, THUMBNAIL_PATH)
-                    seedr.deleteFolder(id)
-                    file.write(magnet + "\n")
-                    file.flush()  # Ensure data is written immediately
-                    subprocess.run(["rclone", "sync", f"{filename}", "College:Shared/Telegram/"])
-    
-            # git_add_process = subprocess.Popen("sh git.sh", shell=True, stdout=subprocess.PIPE)
-            # git_add_process.wait()
-            # break
-            
-            # git_add_process = subprocess.Popen("git add magnet_links.txt", shell=True, stdout=subprocess.PIPE)
-            # git_add_process.wait()
-    
-            # git_commit_process = subprocess.Popen('git commit -m "Updated"', shell=True, stdout=subprocess.PIPE)
-            # git_commit_process.wait()
-    
-            # elapsed_time = time() - start_time
-            # if elapsed_time > 0.2 * 60 * 60:  # 5 hours in seconds
-            #     print("Stopping script after 2.5 hours.")
-            #     break
+                        os.remove(filepath)  # Delete file after uploading
+                seedr.deleteFolder(id)
+                add_btih(btih)
+
 except Exception as e:
-    print("Error Occured :",e)
+    print("Error Occurred:", e)

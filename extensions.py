@@ -128,7 +128,7 @@ def seedr_download(MagneticURL,seedr):
 def aria2_download(filename, link):
     print(f"Downloading {filename} with {link}")
 
-    command = f"aria2c -o '{filename}' -c -s 16 -x 16 -k 1M -j 1 '{link}'"
+    command = f"aria2c -o '{filename}' -c -s 2 -x 2 -k 1M -j 1 '{link}'"
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     
     stdout, stderr = process.communicate()
