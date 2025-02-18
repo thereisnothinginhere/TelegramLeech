@@ -17,7 +17,7 @@ seedr = Seedr(token=account.token)
 
 CHAT_ID = '-1002068315295'
 THUMBNAIL_PATH = 'Thumbnail.jpg'
-Site = "https://www.1tamilmv.bike/"
+Site = "https://www.1tamilmv.gold/"
 
 def get_magnetic_urls(URL):
     response = requests.get(URL)
@@ -74,6 +74,9 @@ def main():
             print(f"Index {current_index} already processed. Skipping.")
             continue
 
+        if int(current_index) == 185742:
+          continue
+        
         print(f"Processing new index: {current_index}")
         magnets = get_magnetic_urls(site)
         for magnet in reversed(magnets):
