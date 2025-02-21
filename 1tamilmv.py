@@ -17,7 +17,7 @@ seedr = Seedr(token=account.token)
 
 CHAT_ID = '-1002068315295'
 THUMBNAIL_PATH = 'Thumbnail.jpg'
-Site = "https://www.1tamilmv.gold/"
+Site = "https://www.1tamilmv.com/"
 
 def get_magnetic_urls(URL):
     response = requests.get(URL)
@@ -61,7 +61,7 @@ def main():
 
     response = requests.get(Site)
     soup = BeautifulSoup(response.text, 'html.parser')
-    links = [link['href'] for link in soup.find_all('a', href=lambda x: x and x.startswith(Site + 'index.php?/forums/topic/'))]
+    links = [link['href'] for link in soup.find_all('a', href=lambda x: x and x.endswith('-0'))]
 
     for site in sorted(links):
         current_index = get_index_from_url(site)
