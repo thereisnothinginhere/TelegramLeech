@@ -8,7 +8,7 @@ from urllib.parse import unquote
 import requests
 
 # User Inputs
-TELEGRAM_TOKEN = '5942550686:AAEkBVyp0U0zhP3z7ylmw4m2KS-pTD9UyZQ'  # Important secret in caps
+TELEGRAM_TOKEN = '5942550686:AAFbd7hUu9HMN80D2Y2rNP7aj4FMCyZvAhk'  # Important secret in caps
 API_HASH = 'e18a786351fb201760b000217ff60500'  # Important secret in caps
 API_ID = '10437406'
 API_SERVER_URL = 'http://localhost:8081/bot'
